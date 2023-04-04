@@ -14,21 +14,10 @@ resource "jenkins_job" "job" {
     repo_url = lookup(element(var.jobs, count.index), "repo_url", null)
   })
 
-  locals {
-    ignore_changes = [
-      for attribute_name in var.ignore_changes_list : attribute_name if contains(keys(self), attribute_name)
-    ]
-  }
-
   lifecycle {
-    ignore_changes = local.ignore_changes
+    ignore_changes = [template]
   }
 
 }
 
-
-variable "ignore_changes_list" {
-  type    = list(string)
-  default = ["template"]
-}
 
